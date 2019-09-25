@@ -15,7 +15,7 @@ class Transaction::TransactionController < ApplicationController
     wallet_to = Wallet.find_by_name(recipient_param[:wallet_name])
 
   	if recipient_valid(wallet_to, current_user)
-    	current_user.wallet.transfer(wallet_to, amount) ? m_tx_success('Transfer') : m_tx_error
+    	current_user.transfer(wallet_to.user, amount) ? m_tx_success('Transfer') : m_tx_error
     else
     	flash[:alert] = "Recipient is not valid"
     end
@@ -24,14 +24,12 @@ class Transaction::TransactionController < ApplicationController
 	end
 
 	def do_deposit
-		wallet= current_user.wallet
-		wallet.deposit(amount) ? m_tx_success('Deposit') : m_tx_error
+		current_user.deposit(amount) ? m_tx_success('Deposit') : m_tx_error
 		redirect_back(fallback_location: root_path)
 	end
 
 	def do_withdrawal
-		wallet= current_user.wallet
-		wallet.withdraw(amount) ? m_tx_success('Withdrawal') : m_tx_error
+		current_user.withdraw(amount) ? m_tx_success('Withdrawal') : m_tx_error
 		redirect_back(fallback_location: root_path)
  	end
 

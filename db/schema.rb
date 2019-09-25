@@ -40,7 +40,6 @@ ActiveRecord::Schema.define(version: 2018_10_15_043413) do
 
   create_table "wallets", force: :cascade do |t|
     t.string "name"
-    t.float "balance", default: 0.0
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
