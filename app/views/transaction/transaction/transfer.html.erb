@@ -9,7 +9,8 @@
 				<br/>
 				<%= number_field_tag 'amount', @amount , :required => "required", :autocomplete => "off", :placeholder =>"Amount", :class => "form-control"%>
 				<br/>
-				<button class="btn btn-primary" type="submit">Transfer Now</button>
+
+				<%= submit_tag "Transfer Now", class: "btn btn-primary", data: {confirm: "Are you sure to transfer?"} %>
 				<%= link_to "Back", root_path, :class => 'btn btn-default btn-md'  %>
 				<br>
 				<br>

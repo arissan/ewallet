@@ -1,7 +1,7 @@
 <h3>Emveep Wallet</h3>
 <p>just a simple wallet</p>
 
-<%= render 'shared/wallet_info' %>
+<%= render 'shared/wallet_info' if user_signed_in? %>
 
 <% if stock_signed_in? %>
 	<%= link_to "Transactions", dashboard_stock_subjects_index_path, :class => 'btn btn-primary btn-md'  %>
@@ -16,4 +16,3 @@
 	<%= link_to "Transfer", transaction_transaction_transfer_path, :class => 'btn btn-info btn-md'  %>
 	<%= link_to "Withdrawal", transaction_transaction_withdrawal_path, :class => 'btn btn-success btn-md'  %>
 <% end %>
-

@@ -6,7 +6,9 @@ class ApplicationController < ActionController::Base
 private
 
     def load_transactions(current_user)
-        @tx_histories = current_user.transaction_histories.order('id ASC')
+        conditions= {}
+        conditions[:type]= params[:type] if params[:type].present?
+        @tx_histories = current_user.transaction_histories.where(conditions).order('id ASC')
     end
 
     def load_wallet_info(current_user)

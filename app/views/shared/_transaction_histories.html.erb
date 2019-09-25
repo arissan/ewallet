@@ -1,3 +1,6 @@
+<%= link_to 'Refresh Transactions', dashboard_team_subjects_index_path, class: 'btn btn-success' if team_signed_in? %>
+<%= link_to 'Refresh Transactions', dashboard_stock_subjects_index_path, class: 'btn btn-success' if stock_signed_in? %>
+
 <table class="table">
   <thead>
     <tr>

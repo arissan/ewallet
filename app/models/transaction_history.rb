@@ -1,5 +1,5 @@
 class TransactionHistory < ApplicationRecord
-	TYPES= %(Transfer Deposit Withdrawal)
+	TYPES= %w(Transfer Deposit Withdrawal)
 	validates :type, presence: true
   belongs_to :user
 	belongs_to :from, class_name: 'Wallet', foreign_key: :from_id, optional: true
