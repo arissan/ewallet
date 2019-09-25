@@ -1,0 +1,17 @@
+<div class="wrapper">
+    <div class="col-md-3">
+      <h3 class="form-signin-heading">Login as <%= resource_name %></h3>
+      <hr/>
+     <%= form_for(resource, as: resource_name, html: {:class => 'form-signin'}, url: session_path(resource_name)) do |f| %>
+     <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email Address", required:true, :class => 'form-control'  %>
+      <%= f.password_field :password, placeholder: "Password", required:true, :class => 'form-control'  %>
+      <label class="checkbox">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </label>
+       <%= f.submit "Log in", :class => "btn btn-sm btn-primary btn-block" %> 
+    <% end %>
+    <br/>
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

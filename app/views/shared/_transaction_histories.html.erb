@@ -1,0 +1,30 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Tx Type</th>
+      <th>Wallet Number</th>
+      <th>Debit</th>
+      <th>Credit</th>
+      <th>Balance</th>
+      <th>Transaction Time</th>
+    </tr>
+</thead>
+  <tbody>
+    <% @tx_histories.each_with_index do |tx, index| %>
+      <tr>
+        <td><%= index+ 1 %></td>
+        <td><%= tx.type %></td>
+        <td><%= tx.info %></td>
+        <td><%= set_debit(tx.type,tx.amount) %></td>
+        <td><%= set_credit(tx.type,tx.amount) %></td>
+        <td><%= tx.last_balance %></td>
+        <td><%= tx.created_at.to_s(:long) %></td>
+        <td></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br/>
+<%= link_to "Back", root_path, :class => 'btn btn-primary btn-md'  %>

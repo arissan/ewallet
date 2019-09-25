@@ -1,0 +1,21 @@
+<h1>Transfer Page</h1>
+<%= render 'shared/wallet_info' %>
+
+<div class="row">
+	<div class="col-md-5 col-md-offset-1">
+			<%= form_tag transaction_transaction_do_transfer_path, :method => "post" do %>
+				<br>
+				<%= text_field_tag 'wallet_name', @name , :required => "required", :autocomplete => "off", :placeholder =>"Recipient Wallet Number", :class => "form-control"%>
+				<br/>
+				<%= number_field_tag 'amount', @amount , :required => "required", :autocomplete => "off", :placeholder =>"Amount", :class => "form-control"%>
+				<br/>
+				<button class="btn btn-primary" type="submit">Transfer Now</button>
+				<%= link_to "Back", root_path, :class => 'btn btn-default btn-md'  %>
+				<br>
+				<br>
+			<%end%>
+	</div>
+</div>
+
+<br/>
+<br/>
