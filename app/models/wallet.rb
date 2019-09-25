@@ -1,6 +1,6 @@
 class Wallet < ApplicationRecord
 	belongs_to :user
-	validates_presence_of :name
+	validates_presence_of :no
 	validates_uniqueness_of :user_id
 
 	class << self
@@ -8,7 +8,7 @@ class Wallet < ApplicationRecord
 			return user.wallet if user.wallet.present?
 
 			wallet = user.build_wallet
-			wallet.name = random_wallet_number
+			wallet.no = random_wallet_number
 			wallet.save!
 			wallet
 		end

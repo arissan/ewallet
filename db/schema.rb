@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2018_10_15_043413) do
   end
 
   create_table "wallets", force: :cascade do |t|
-    t.string "name"
+    t.string "no"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
