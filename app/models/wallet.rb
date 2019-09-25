@@ -3,17 +3,6 @@ class Wallet < ApplicationRecord
 	validates_presence_of :name
 	validates_uniqueness_of :user_id
 
-	def balance
-		debit= user.transfers.sum(:amount) + user.withdrawals.sum(:amount)
-		credit= user.deposits.sum(:amount)
-		(debit - credit).abs
-	end
-
-	def get_running_balance(running_id)
-		# as the instruction to summing records...
-		sum_credit(running_id) -  sum_debit(running_id)
-	end
-
 	class << self
 		def open(user)
 			return user.wallet if user.wallet.present?
@@ -32,6 +21,17 @@ class Wallet < ApplicationRecord
 				return wallet_number
 		  end
 
+	end
+
+	def balance
+		debit= user.transfers.sum(:amount) + user.withdrawals.sum(:amount)
+		credit= user.deposits.sum(:amount)
+		(debit - credit).abs
+	end
+
+	def get_running_balance(running_id)
+		# as the instruction to summing records...
+		sum_credit(running_id) -  sum_debit(running_id)
 	end
 
 	def deposit(amount)

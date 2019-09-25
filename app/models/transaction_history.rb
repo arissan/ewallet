@@ -3,7 +3,7 @@ class TransactionHistory < ApplicationRecord
 	validates :type, presence: true
   belongs_to :user
 	belongs_to :from, class_name: 'Wallet', foreign_key: :from_id, optional: true
-	belongs_to :to, class_name: 'Wallet', foreign_key: :to_id, optional: true
+	belongs_to :to, class_name: 'Wallet', foreign_key: :to_id
 
   def info
     wn= to.name if self.is_a?(Transfer)
