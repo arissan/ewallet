@@ -6,9 +6,8 @@ class TransactionHistory < ApplicationRecord
 	belongs_to :to, class_name: 'Wallet', foreign_key: :to_id, optional: true
 
   def info
-    wn= to.name if self.is_a?(Transfer)
-    wn= from.name if self.is_a?(Withdrawal)
-    wn= to.name if self.is_a?(Deposit)
+    wn= to.no if [Transfer, Deposit].include?(self.class)
+    wn= from.no if self.is_a?(Withdrawal)
     wn
   end
 
