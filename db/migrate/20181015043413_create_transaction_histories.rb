@@ -5,7 +5,6 @@ class CreateTransactionHistories < ActiveRecord::Migration[5.2]
       t.integer :from_id, null: true
       t.integer :to_id, null: true
       t.string  :type
-      t.decimal :last_balance, :default => 0.00
       t.references :user, null: false
       t.timestamps null: false
     end
