@@ -5,6 +5,18 @@ class ApplicationController < ActionController::Base
 
 private
 
+    def transactions_path
+        return root_path if current_user.blank?
+        if current_user.is_a?(Stock)
+            return dashboard_stock_subjects_index_path
+        end
+
+        if current_user.is_a?(Team)
+            return dashboard_team_subjects_index_path
+        end
+        return root_path
+    end
+
     def load_transactions(current_user)
         conditions= {}
         conditions[:type]= params[:type] if params[:type].present?

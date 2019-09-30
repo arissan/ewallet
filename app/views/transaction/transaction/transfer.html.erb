@@ -3,20 +3,7 @@
 
 <div class="row">
 	<div class="col-md-5 col-md-offset-1">
-			<%= form_tag transaction_transaction_do_transfer_path, :method => "post" do %>
-				<br>
-				<%= text_field_tag 'wallet_no', @name , :required => "required", :autocomplete => "off", :placeholder =>"Recipient Wallet Number", :class => "form-control"%>
-				<br/>
-				<%= number_field_tag 'amount', @amount , :required => "required", :autocomplete => "off", :placeholder =>"Amount", :class => "form-control"%>
-				<br/>
-
-				<%= submit_tag "Transfer Now", class: "btn btn-primary", data: {confirm: "Are you sure to transfer?"} %>
-				<%= link_to "Back", root_path, :class => 'btn btn-default btn-md'  %>
-				<br>
-				<br>
-			<%end%>
+		<%= render 'form_transfer' %>
 	</div>
 </div>
-
-<br/>
 <br/>

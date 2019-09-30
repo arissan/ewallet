@@ -1,0 +1,11 @@
+<%= emf(@trans) %>
+<%= form_tag transaction_transaction_do_transfer_path, :method => "post" do %>
+  <br>
+  <%= text_field_tag 'wallet_no', @name , :required => "required", :autocomplete => "off", :placeholder =>"Recipient Wallet Number", :class => "form-control"%>
+  <br/>
+  <%= number_field_tag 'amount', @amount , :required => "required", :autocomplete => "off", :placeholder =>"Amount", :class => "form-control"%>
+  <br/>
+
+  <%= submit_tag "Transfer Now", class: "btn btn-primary", data: {confirm: "Are you sure to transfer ?"} %>
+  <%= link_to "Back", root_path, :class => 'btn btn-default btn-md'  %>
+<%end%>

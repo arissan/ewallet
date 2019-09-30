@@ -1,6 +1,6 @@
 <%= link_to 'Refresh Transactions', dashboard_team_subjects_index_path, class: 'btn btn-success' if team_signed_in? %>
 <%= link_to 'Refresh Transactions', dashboard_stock_subjects_index_path, class: 'btn btn-success' if stock_signed_in? %>
-
+<%= link_to "Back", root_path, :class => 'btn btn-primary btn-md'  %>
 <table class="table">
   <thead>
     <tr>
@@ -14,20 +14,24 @@
     </tr>
 </thead>
   <tbody>
-    <% @tx_histories.each_with_index do |tx, index| %>
+    <% if @tx_histories.present? %>
+      <% @tx_histories.each_with_index do |tx, index| %>
+        <tr>
+          <td><%= index+1 %></td>
+          <td><%= tx.type %></td>
+          <td><%= tx.info %></td>
+          <td><%= set_debit(tx.type,tx.amount) %></td>
+          <td><%= set_credit(tx.type,tx.amount) %></td>
+          <td><%= tx.user.wallet.get_running_balance(tx.id) %></td>
+          <td><%= tx.created_at.to_s(:long) %></td>
+          <td></td>
+        </tr>
+      <% end %>
+    <% else %>
       <tr>
-        <td><%= index+1 %></td>
-        <td><%= tx.type %></td>
-        <td><%= tx.info %></td>
-        <td><%= set_debit(tx.type,tx.amount) %></td>
-        <td><%= set_credit(tx.type,tx.amount) %></td>
-        <td><%= tx.user.wallet.get_running_balance(tx.id) %></td>
-        <td><%= tx.created_at.to_s(:long) %></td>
-        <td></td>
+        <td> No transactions found. </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br/>
 <%= link_to "Back", root_path, :class => 'btn btn-primary btn-md'  %>

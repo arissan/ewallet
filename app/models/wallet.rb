@@ -2,6 +2,7 @@ class Wallet < ApplicationRecord
 	belongs_to :user
 	validates_presence_of :no
 	validates_uniqueness_of :user_id
+	BALANCE_NOT_ENOUGHT= 'doesnt enought. Check your request amount'
 
 	class << self
 		def open(user)
@@ -26,7 +27,7 @@ class Wallet < ApplicationRecord
 	def balance
 		debit= user.transfers.sum(:amount) + user.withdrawals.sum(:amount)
 		credit= user.deposits.sum(:amount)
-		(debit - credit).abs
+		(credit - debit)
 	end
 
 	def get_running_balance(running_id)
@@ -35,36 +36,24 @@ class Wallet < ApplicationRecord
 	end
 
 	def deposit(amount)
-		return false unless amount_valid?(amount)
-		ActiveRecord::Base.transaction do
-			# self.balance = (self.balance += amount).round(2)
-			self.save!
-			Deposit.save_history(self, amount)
-		end
+		Deposit.save_history(self, amount)
 	end
 
 	def withdraw(amount)
-		return false unless amount_enough?(amount, self.balance)
-		ActiveRecord::Base.transaction do
-			# self.balance = (self.balance -= amount).round(2)
-			self.save!
-			Withdrawal.save_history(self, amount)
-		end
+		Withdrawal.save_history(self, amount)
 	end
 
 	def transfer(wallet_to, amount)
-		return false unless amount_enough?(amount, self.balance)
-		ActiveRecord::Base.transaction do
-			# reduce from
-			# self.balance = (self.balance -= amount).round(2)
-			self.save!
-			# add to
-			# wallet_to.balance = (wallet_to.balance += amount).round(2)
-			wallet_to.save!
-
-			Transfer.save_history(self, wallet_to, amount)
-		end
+		# ActiveRecord::Base.transaction do
+		Transfer.save_history(self, wallet_to, amount)
 	end
+
+  def is_balance_enought?(amount)
+  	if amount.to_f > self.balance
+  		self.errors.add(:balance, BALANCE_NOT_ENOUGHT)
+  	end
+  	return self.errors.blank?
+  end
 
 	private
 

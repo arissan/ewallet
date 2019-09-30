@@ -1,22 +1,42 @@
 class Transfer < TransactionHistory
+  attr_accessor :as_source_transfer
+  validate :validate_balance, if: :as_source_transfer?
+  validate :validate_source_target
+
+  def as_source_transfer?
+    @as_source_transfer
+  end
+
+  def validate_balance
+    if not user.wallet.is_balance_enought?(self.amount)
+      self.errors.add(:balance, Wallet::BALANCE_NOT_ENOUGHT)
+    end
+  end
+
+  def validate_source_target
+    if not (from.try(:valid?) and to.try(:valid?) and from != to )
+      self.errors.add(:target, 'transfer doesnt not valid')
+    end
+  end
 
   def self.save_history(wallet_from, wallet_to, amount)
-    return false unless self.amount_valid?(amount)
+    transfer = wallet_from.user.transfers.new
+    deposit = wallet_to.user.deposits.new
     ActiveRecord::Base.transaction do
-        transaction_history = wallet_from.user.transfers.new
-        transaction_history.amount = amount
-        transaction_history.from = wallet_from
-        transaction_history.to = wallet_to
-        transaction_history.last_balance = wallet_from.balance
-        transaction_history.save!
+        transfer.as_source_transfer= true
+        transfer.amount = amount
+        transfer.from = wallet_from
+        transfer.to = wallet_to
+        transfer.valid?
+        transfer.save!
 
-        transaction_history = wallet_to.user.deposits.new
-        transaction_history.amount = amount
-        transaction_history.from = wallet_from
-        transaction_history.to = wallet_to
-        transaction_history.last_balance = wallet_to.balance
-        transaction_history.save!
-    end
+        deposit.amount = amount
+        deposit.from = wallet_from
+        deposit.to = wallet_to
+        deposit.valid?
+        deposit.save!
+    end rescue false
+    return {transfer: transfer, deposit: deposit}
   end
 
 end
