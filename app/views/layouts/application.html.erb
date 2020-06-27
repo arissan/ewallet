@@ -25,6 +25,7 @@
           <% if team_signed_in? %>
             <%= current_user.type %><br/>
             <%= current_user.email %> |
+
             <%= link_to 'Log out', destroy_team_session_path, method: :delete %>
           <% else  %>
             <%= link_to "Login as Team", new_team_session_path, :class => 'navbar-link'  %> |
@@ -55,8 +56,8 @@
       <hr />
       <% if user_signed_in? %>
         <%= link_to "Home", root_path, :class => 'btn btn-danger btn-md'  %>
-        <%= link_to "Deposit", transaction_transaction_deposit_path, :class => 'btn btn-warning btn-md'  %>
-        <%= link_to "Withdrawal", transaction_transaction_withdrawal_path, :class => 'btn btn-success btn-md'  %>
+        <%= link_to "Deposit", transaction_transaction_deposit_path(type: 'Deposit'), :class => 'btn btn-warning btn-md'  %>
+        <%= link_to "Withdrawal", transaction_transaction_withdrawal_path(type: 'Withdrawal'), :class => 'btn btn-success btn-md'  %>
         <%= link_to 'All Transactions', transactions_path, class: 'btn btn-primary' %>
       <% end %>
 

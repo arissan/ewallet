@@ -21,6 +21,7 @@ private
         conditions= {}
         conditions[:type]= params[:type] if params[:type].present?
         conditions[:item_id]= params[:item_id] if params[:item_id].present?
+        conditions[:type]= params[:type] if params[:type].present?
         @tx_histories = TransactionHistory.where(conditions).order('id ASC')
     end
 

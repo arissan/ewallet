@@ -48,7 +48,7 @@ class Wallet < ApplicationRecord
 		def sum_debit(running_id, item_id)
 			summing_resources.where(['item_id = ? AND type IN (?) AND id <= ?', item_id, ['Withdrawal'], running_id]).order('id ASC').sum(:amount)
 		end
-
+Withdrawal
 		def sum_credit(running_id, item_id)
 			summing_resources.where(['item_id = ? AND type IN (?) AND id <= ?', item_id, ['Deposit'], running_id]).order('id ASC').sum(:amount)
 		end

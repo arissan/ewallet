@@ -1,5 +1,4 @@
 <h1>Deposit Page</h1>
-<%= render 'shared/wallet_info' %>
 <div class="row">
 
 	<div class="col-md-5 col-md-offset-1">
@@ -12,7 +11,9 @@
 				<br/>
 				Select Donatur (If any)
 				<%= select_tag 'donatur_id', options_for_select(Donatur.options), :required => "required", :placeholder =>"Amount", :class => "form-control"%>
-				<br>
+				<br>Notes
+				<%= text_field_tag 'notes', '', :required => "required", :autocomplete => "off", :placeholder =>"Usage...", :class => "form-control"%>
+				<br />
 				<button class="btn btn-primary" type="submit">Deposit Now</button>
 				<%= link_to "Back", root_path, :class => 'btn btn-default btn-md'  %>
 
@@ -20,5 +21,4 @@
 	</div>
 </div>
 
-<br/>
-<br/>
+<div class='row'><%= render 'shared/transaction_histories' %></div>

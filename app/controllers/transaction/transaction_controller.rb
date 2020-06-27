@@ -6,10 +6,12 @@ class Transaction::TransactionController < ApplicationController
 
 	def deposit
 		@trans= current_user.deposits.new
+		load_transactions(current_user)
 	end
 
 	def withdrawal
 		@trans= current_user.withdrawals.new
+		load_transactions(current_user)
 	end
 
 	def do_deposit
