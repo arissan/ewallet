@@ -20,7 +20,8 @@ private
     def load_transactions(current_user)
         conditions= {}
         conditions[:type]= params[:type] if params[:type].present?
-        @tx_histories = current_user.transaction_histories.where(conditions).order('id ASC')
+        conditions[:item_id]= params[:item_id] if params[:item_id].present?
+        @tx_histories = TransactionHistory.where(conditions).order('id ASC')
     end
 
     def load_wallet_info(current_user)

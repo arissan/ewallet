@@ -30,11 +30,16 @@ Rails.application.routes.draw do
 
   devise_for :stocks
   devise_for :teams
-  
+  devise_for :donaturs
+
 
   namespace :dashboard do
     authenticated :team do
       resources :subjects, module: "team", :only => [:show, :index]
+    end
+
+    authenticated :donaturs do
+      resources :subjects, module: "donatur", :only => [:show, :index]
     end
 
     authenticated :stock do
@@ -46,6 +51,7 @@ Rails.application.routes.draw do
 
    namespace :transaction do
     namespace :transaction do
+      get 'show'
       get 'transfer'
       post 'do_transfer'
       get 'deposit'

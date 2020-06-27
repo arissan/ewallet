@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>EmveepWallet</title>
+    <title>Pondok Tahfidz Shirothol Mustaqim</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.css">
@@ -23,21 +23,21 @@
       <% if user_signed_in? %>
         <% if !stock_signed_in? %>
           <% if team_signed_in? %>
-            <%= current_user.type %><br/> 
-            <%= current_user.email %> | 
+            <%= current_user.type %><br/>
+            <%= current_user.email %> |
             <%= link_to 'Log out', destroy_team_session_path, method: :delete %>
           <% else  %>
             <%= link_to "Login as Team", new_team_session_path, :class => 'navbar-link'  %> |
             <%= link_to "Sign up as Team", new_team_registration_path, :class => 'navbar-link'  %>
           <% end %>
         <% end %>
-        
+
         <br/>
-        
+
         <% if !team_signed_in? %>
           <% if stock_signed_in? %>
             <%= current_user.type %><br/>
-            <%= current_user.email %> | 
+            <%= current_user.email %> |
             <%= link_to 'Log out', destroy_stock_session_path, method: :delete %>
            <% else %>
             <%= link_to "Login as Stock", new_stock_session_path, :class => 'navbar-link'  %> |
@@ -48,9 +48,18 @@
         Login as : <%= link_to "Team", new_team_session_path, :class => 'navbar-link'  %> |  <%= link_to "Stock", new_stock_session_path, :class => 'navbar-link'  %>
       <% end %>
     </p>
-    
+
 
     <div class="container">
+
+      <hr />
+      <% if user_signed_in? %>
+        <%= link_to "Home", root_path, :class => 'btn btn-danger btn-md'  %>
+        <%= link_to "Deposit", transaction_transaction_deposit_path, :class => 'btn btn-warning btn-md'  %>
+        <%= link_to "Withdrawal", transaction_transaction_withdrawal_path, :class => 'btn btn-success btn-md'  %>
+        <%= link_to 'All Transactions', transactions_path, class: 'btn btn-primary' %>
+      <% end %>
+
       <%= yield %>
     </div>
 

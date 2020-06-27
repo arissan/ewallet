@@ -1,18 +1,20 @@
 <h1>Deposit Page</h1>
 <%= render 'shared/wallet_info' %>
 <div class="row">
+
 	<div class="col-md-5 col-md-offset-1">
 			<%= emf(@trans) %>
 			<%= form_tag transaction_transaction_do_deposit_path, :method => "post" do %>
-				<br>
+				<br>Select Item
+				<%= select_tag 'item_id', options_for_select(Item.options), :required => "required", :placeholder =>"Amount", :class => "form-control"%>
+				<br>Amount
 				<%= number_field_tag 'amount', @amount , :required => "required", :autocomplete => "off", :placeholder =>"Amount", :class => "form-control"%>
 				<br/>
-
+				Select Donatur (If any)
+				<%= select_tag 'donatur_id', options_for_select(Donatur.options), :required => "required", :placeholder =>"Amount", :class => "form-control"%>
+				<br>
 				<button class="btn btn-primary" type="submit">Deposit Now</button>
 				<%= link_to "Back", root_path, :class => 'btn btn-default btn-md'  %>
-
-				<br>
-				<br>
 
 			<%end%>
 	</div>

@@ -1,30 +1,33 @@
-<%= link_to 'Refresh Transactions', dashboard_team_subjects_index_path, class: 'btn btn-success' if team_signed_in? %>
-<%= link_to 'Refresh Transactions', dashboard_stock_subjects_index_path, class: 'btn btn-success' if stock_signed_in? %>
-<%= link_to "Back", root_path, :class => 'btn btn-primary btn-md'  %>
 <table class="table">
   <thead>
     <tr>
       <th>No</th>
-      <th>Tx Type</th>
-      <th>Wallet Number</th>
+      <th>Type</th>
+      <th>Item</th>
       <th>Debit</th>
       <th>Credit</th>
+      <% if params[:item_id].present? %>
       <th>Balance</th>
-      <th>Transaction Time</th>
+      <% end %>
+      <th>Reporter</th>
+      <th>Time</th>
     </tr>
 </thead>
   <tbody>
     <% if @tx_histories.present? %>
       <% @tx_histories.each_with_index do |tx, index| %>
-        <tr>
+        <tr style="<%= tx.type.to_s=='Withdrawal' ? 'color: red' : 'color: black' %>" >
           <td><%= index+1 %></td>
-          <td><%= tx.type %></td>
-          <td><%= tx.info %></td>
-          <td><%= set_debit(tx.type,tx.amount) %></td>
-          <td><%= set_credit(tx.type,tx.amount) %></td>
-          <td><%= tx.user.wallet.get_running_balance(tx.id) %></td>
+          <td><%= tx.type_ina %></td>
+          <td><%= link_to tx.item.try(:full_name), transactions_path(tx.item_id) %></td>
+          <td><%= number_to_currency set_debit(tx.type,tx.amount), unit: "", delimiter: ".", separator: "," %></td>
+          <td><%= number_to_currency set_credit(tx.type,tx.amount), unit: "", delimiter: ".", separator: ","  %></td>
+          <% if params[:item_id].present? %>
+          <td><%= number_to_currency tx.user.wallet.get_running_balance(tx.id, tx.item_id), unit: "", delimiter: ".", separator: "," %></td>
+          <% end %>
+          <td><%= tx.user.name %></td>
           <td><%= tx.created_at.to_s(:long) %></td>
-          <td></td>
+          <td><%= link_to "?", transaction_transaction_show_path(id: tx.id), class: 'btn btn-warning' %></td>
         </tr>
       <% end %>
     <% else %>
@@ -34,4 +37,3 @@
     <% end %>
   </tbody>
 </table>
-<%= link_to "Back", root_path, :class => 'btn btn-primary btn-md'  %>

@@ -1,13 +1,7 @@
 class Transaction::TransactionController < ApplicationController
 
-	def transfer
-    recipient_param = params.permit(:wallet_no)
-    wallet_to = Wallet.find_by_no(recipient_param[:wallet_no])
-
-		@trans= current_user.transfers.new
-		@trans.to= wallet_to
-		@trans.from= current_user.wallet
-		@trans.amount= @amount
+	def show
+		@trans = TransactionHistory.find(params[:id])
 	end
 
 	def deposit
@@ -18,33 +12,10 @@ class Transaction::TransactionController < ApplicationController
 		@trans= current_user.withdrawals.new
 	end
 
-	def do_transfer
-    recipient_param = params.permit(:wallet_no)
-		@amount= params[:amount]
-		@name= params[:wallet_no]
-    wallet_to = Wallet.find_by_no(recipient_param[:wallet_no])
-    target= wallet_to.try(:user)
-    if target.blank?
-    	@trans= current_user.transfers.new
-    	@trans.amount= @amount
-    	@trans.valid?
-    	m_tx_error('Transfer')
-			render action: :transfer
-			return
-    end
-
-		@trans= current_user.transfer(target, @amount)
-		if @trans.errors.blank?
-			m_tx_success('Transfer')
-			redirect_to transactions_path
-		else
-			m_tx_error('Transfer')
-			render action: :transfer
-		end
-	end
-
 	def do_deposit
-		@trans= current_user.deposit(amount)
+		item= Item.find(params[:item_id]) rescue nil
+		donatur= Donatur.find(params[:donatur_id]) rescue nil
+		@trans= current_user.deposit(amount, item, donatur, params[:notes])
 		if @trans.errors.blank?
 			m_tx_success('Deposit')
 			redirect_to transactions_path
@@ -55,7 +26,9 @@ class Transaction::TransactionController < ApplicationController
 	end
 
 	def do_withdrawal
-		@trans= current_user.withdraw(amount)
+		item= Item.find(params[:item_id]) rescue nil
+		donatur= Donatur.find(params[:donatur_id]) rescue nil
+		@trans= current_user.withdraw(amount, item, donatur, params[:notes])
 		if @trans.errors.blank?
 			m_tx_success('Withdraw')
 			redirect_to transactions_path
@@ -67,14 +40,9 @@ class Transaction::TransactionController < ApplicationController
 
 	private
 
-		# def recipient_valid(wallet_to, current_user)
-		# 	return false if wallet_to.nil? or (wallet_to.user_id == current_user.id)
-		# 	return true
-		# end
-
 		def amount
-		  param = params.permit(:amount)
-		 	param[:amount].to_f
+		  	param = params.permit(:amount)
+		  	param[:amount].to_f
 		end
 
 		def m_tx_error(tx_name)

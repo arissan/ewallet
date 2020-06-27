@@ -1,18 +1,24 @@
-<h3>Emveep Wallet</h3>
-<p>just a simple wallet</p>
-
-<%= render 'shared/wallet_info' if user_signed_in? %>
-
-<% if stock_signed_in? %>
-	<%= link_to "Transactions", dashboard_stock_subjects_index_path, :class => 'btn btn-primary btn-md'  %>
-<% end %>
-
-<% if team_signed_in? %>
-	<%= link_to "Transactions", dashboard_team_subjects_index_path, :class => 'btn btn-primary btn-md'  %>
-<% end %>
-
 <% if user_signed_in? %>
-	<%= link_to "Deposit", transaction_transaction_deposit_path, :class => 'btn btn-warning btn-md'  %>
-	<%= link_to "Transfer", transaction_transaction_transfer_path, :class => 'btn btn-info btn-md'  %>
-	<%= link_to "Withdrawal", transaction_transaction_withdrawal_path, :class => 'btn btn-success btn-md'  %>
+<h3> Dashboard </h3>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Item</th>
+      <th>Target Amount</th>
+      <th>Balance</th>
+      <th>Target Date Until</th>
+    </tr>
+</thead>
+  <tbody>
+      <% Item.order("name ASC").each_with_index do |tx, index| %>
+        <tr style="<%= tx.target_amount >= current_user.wallet.get_running_balance(TransactionHistory.last.id, tx.id) ? 'color: red': 'color: blue' %>">
+          <td><%= tx.name %>(<%= tx.unit %>)</td>
+          <td><%= number_to_currency tx.target_amount, unit: "", delimiter: ".", separator: "," %></td>
+          <td><%= number_to_currency current_user.wallet.get_running_balance(TransactionHistory.last.id, tx.id), unit: "", delimiter: ".", separator: "," %></td>
+          <td><%= tx.target_date.to_s(:long) rescue nil %></td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
 <% end %>

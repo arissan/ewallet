@@ -10,17 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_15_043413) do
+ActiveRecord::Schema.define(version: 201700627172518) do
+
+  create_table "items", force: :cascade do |t|
+    t.string "name"
+    t.string "unit"
+    t.integer "target_amount"
+    t.date "target_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "transaction_histories", force: :cascade do |t|
     t.decimal "amount", default: "0.0"
     t.integer "from_id"
     t.integer "to_id"
     t.string "type"
-    t.decimal "last_balance", default: "0.0"
+    t.string "notes"
+    t.integer "item_id", null: false
+    t.integer "donatur_id"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["donatur_id"], name: "index_transaction_histories_on_donatur_id"
+    t.index ["item_id"], name: "index_transaction_histories_on_item_id"
     t.index ["user_id"], name: "index_transaction_histories_on_user_id"
   end
 

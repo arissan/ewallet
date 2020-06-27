@@ -3,7 +3,7 @@ class Dashboard::Stock::SubjectsController < ApplicationController
 
 	def index
 		load_wallet_info(current_user)
-    load_transactions(current_user)
+    	load_transactions(current_user)
 	end
 
 end

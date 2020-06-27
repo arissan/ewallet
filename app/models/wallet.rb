@@ -16,57 +16,45 @@ class Wallet < ApplicationRecord
 
 		private
 
-		  def random_wallet_number
-				ptrn = [('0'..'0'), ('A'..'Z')].map(&:to_a).flatten
-				wallet_number = (0...8).map { ptrn[rand(ptrn.length)] }.join
-				return wallet_number
-		  end
+		def random_wallet_number
+			ptrn = [('0'..'0'), ('A'..'Z')].map(&:to_a).flatten
+			wallet_number = (0...8).map { ptrn[rand(ptrn.length)] }.join
+			return wallet_number
+		end
 
 	end
 
-	def balance
-		debit= user.transfers.sum(:amount) + user.withdrawals.sum(:amount)
-		credit= user.deposits.sum(:amount)
-		(credit - debit)
+	def get_running_balance(running_id, item_id)
+		sum_credit(running_id, item_id) -  sum_debit(running_id, item_id)
 	end
 
-	def get_running_balance(running_id)
-		# as the instruction to summing records...
-		sum_credit(running_id) -  sum_debit(running_id)
+	def deposit(amount, item, donatur, notes)
+		Deposit.save_history(self, amount, item, donatur, notes)
 	end
 
-	def deposit(amount)
-		Deposit.save_history(self, amount)
+	def withdraw(amount, item, donatur, notes)
+		Withdrawal.save_history(self, amount, item, donatur, notes)
 	end
 
-	def withdraw(amount)
-		Withdrawal.save_history(self, amount)
+	def is_balance_enought?(amount, item)
+		if amount.to_f > self.get_running_balance(TransactionHistory.last.id, item.id)
+			self.errors.add(:balance, BALANCE_NOT_ENOUGHT)
+		end
+		return self.errors.blank?
 	end
-
-	def transfer(wallet_to, amount)
-		# ActiveRecord::Base.transaction do
-		Transfer.save_history(self, wallet_to, amount)
-	end
-
-  def is_balance_enought?(amount)
-  	if amount.to_f > self.balance
-  		self.errors.add(:balance, BALANCE_NOT_ENOUGHT)
-  	end
-  	return self.errors.blank?
-  end
 
 	private
 
-		def sum_debit(running_id)
-			summing_resources.where(['type IN (?) AND id <= ?', ['Withdrawal','Transfer'], running_id]).order('id ASC').sum(:amount)
+		def sum_debit(running_id, item_id)
+			summing_resources.where(['item_id = ? AND type IN (?) AND id <= ?', item_id, ['Withdrawal'], running_id]).order('id ASC').sum(:amount)
 		end
 
-		def sum_credit(running_id)
-			summing_resources.where(['type IN (?) AND id <= ?', ['Deposit'], running_id]).order('id ASC').sum(:amount)
+		def sum_credit(running_id, item_id)
+			summing_resources.where(['item_id = ? AND type IN (?) AND id <= ?', item_id, ['Deposit'], running_id]).order('id ASC').sum(:amount)
 		end
 
 		def summing_resources
-			user.transaction_histories.order('id ASC')
+			TransactionHistory.order('id ASC')
 		end
 
 		def amount_valid?(amount)

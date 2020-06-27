@@ -1,5 +1,10 @@
 module ApplicationHelper
 
+def transactions_path(item_id=nil)
+	return dashboard_stock_subjects_index_path(item_id: item_id) if stock_signed_in?
+	return dashboard_team_subjects_index_path(item_id: item_id) if team_signed_in?
+end
+
 def emf(obj)
 	return if obj.errors.blank?
 
@@ -12,7 +17,7 @@ def emf(obj)
 end
 
 def set_debit(tx_type, amount)
-	if(tx_type == 'Transfer' || tx_type == 'Withdrawal')
+	if(tx_type == 'Withdrawal')
 		amount.round(2)
 	else
 		'-'
